@@ -1,7 +1,7 @@
 # Личный проект «Типотека» [![Build status][travis-image]][travis-url]
 
 * Студент: [Николай Журавлев](https://up.htmlacademy.ru/nodejs/3/user/6241).
-* Наставник: `Неизвестно`.
+* Наставник: [Юрий Кучма](https://htmlacademy.ru/profile/krabaton).
 
 ---
 
