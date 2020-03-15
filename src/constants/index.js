@@ -6,6 +6,8 @@ const USER_ARGV_INDEX = 2;
 
 const DEFAULT_COUNT = 1;
 
+const DEFAULT_PORT = 3000;
+
 const MAX_COUNT = 1000;
 
 const MAX_ANNOUNCE_SENTENCES = 5;
@@ -25,10 +27,19 @@ const ExitCode = {
   error: 1,
 };
 
+const HttpCode = {
+  OK: 200,
+  NOT_FOUND: 404,
+  INTERNAL_SERVER_ERROR: 500,
+  FORBIDDEN: 403,
+  UNAUTHORIZED: 401,
+};
+
 module.exports = {
   DEFAULT_COMMAND,
   USER_ARGV_INDEX,
   DEFAULT_COUNT,
+  DEFAULT_PORT,
   MAX_COUNT,
   MAX_ANNOUNCE_SENTENCES,
   RETROSPECTIVE_MS,
@@ -37,4 +48,5 @@ module.exports = {
   FILE_TITLES_PATH,
   FILE_CATEGORIES_PATH,
   ExitCode,
+  HttpCode,
 };
