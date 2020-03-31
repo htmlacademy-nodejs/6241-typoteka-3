@@ -1,8 +1,9 @@
 'use strict';
 
 const express = require(`express`);
+const path = require(`path`);
 const chalk = require(`chalk`);
-const {DEFAULT_SERVER_PORT} = require(`../constants`);
+const {DEFAULT_SERVER_PORT, PUBLIC_DIR} = require(`../constants`);
 const registerRouter = require(`./routes/register`);
 const loginRouter = require(`./routes/login`);
 const myRouter = require(`./routes/my`);
@@ -11,7 +12,12 @@ const articlesRouter = require(`./routes/articles`);
 const categoriesRouter = require(`./routes/categories`);
 
 const app = express();
-app.get(`/`, (req, res) => res.send(`/`));
+
+app.use(express.static(path.resolve(__dirname, PUBLIC_DIR)));
+app.set(`views`, path.resolve(__dirname, `templates`));
+app.set(`view engine`, `pug`);
+
+app.get(`/`, (req, res) => res.render(`main`));
 app.use(`/register`, registerRouter);
 app.use(`/login`, loginRouter);
 app.use(`/my`, myRouter);
