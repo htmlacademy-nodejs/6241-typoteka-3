@@ -2,6 +2,7 @@
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
+const {nanoid} = require(`nanoid`);
 const {getRandomInt, shuffle} = require(`../../utils`);
 const {
   DEFAULT_COUNT,
@@ -10,7 +11,9 @@ const {
   FILE_CATEGORIES_PATH,
   FILE_TITLES_PATH,
   FILE_SENTENCES_PATH,
+  FILE_COMMENTS_PATH,
   MAX_ANNOUNCE_SENTENCES,
+  CommentsRestrict,
   RETROSPECTIVE_MS,
   ExitCode
 } = require(`../../constants`);
@@ -25,13 +28,20 @@ const readContent = async (filePath) => {
   }
 };
 
-const generateRecords = (count, titles, categories, sentences) => (
+const getComments = (count, comments) => Array(count).fill({}).map(() => ({
+  id: nanoid(6),
+  text: shuffle(comments).slice(0, getRandomInt(1, comments.length - 1)).join(` `),
+}));
+
+const generateRecords = (count, titles, categories, sentences, comments) => (
   Array(count).fill({}).map(() => ({
+    id: nanoid(6),
     title: titles[getRandomInt(0, titles.length - 1)],
     createdDate: new Date(Date.now() - getRandomInt(0, RETROSPECTIVE_MS)),
     announce: shuffle(sentences).slice(0, getRandomInt(1, MAX_ANNOUNCE_SENTENCES)).join(` `),
     fullText: shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
     category: shuffle(categories).slice(0, getRandomInt(1, categories.length - 1)),
+    comments: getComments(getRandomInt(CommentsRestrict.min, CommentsRestrict.max), comments),
   }))
 );
 
@@ -49,8 +59,9 @@ module.exports = {
     const titles = await readContent(FILE_TITLES_PATH);
     const categories = await readContent(FILE_CATEGORIES_PATH);
     const sentences = await readContent(FILE_SENTENCES_PATH);
+    const comments = await readContent(FILE_COMMENTS_PATH);
 
-    const content = JSON.stringify(generateRecords(recordCount, titles, categories, sentences));
+    const content = JSON.stringify(generateRecords(recordCount, titles, categories, sentences, comments));
 
     try {
       await fs.writeFile(FILE_NAME, content);
